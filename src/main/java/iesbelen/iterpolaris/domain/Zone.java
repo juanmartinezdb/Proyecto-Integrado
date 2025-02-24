@@ -50,12 +50,6 @@ public class Zone {
     private Set<Habit> habits = new HashSet<>();
 
 
-    @ManyToMany
-    @JoinTable(name = "zone_skills",
-            joinColumns = @JoinColumn(name = "zone_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    private Set<Skill> skills = new HashSet<>();
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

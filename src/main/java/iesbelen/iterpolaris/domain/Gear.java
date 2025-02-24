@@ -31,4 +31,4 @@ public class Gear {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "effect_id", nullable = false)
     private Effect effect;
-}
+}l
