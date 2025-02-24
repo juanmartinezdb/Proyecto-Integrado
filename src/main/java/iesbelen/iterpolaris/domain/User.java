@@ -51,6 +51,7 @@ public class User {
     private Integer energy;
     private Integer points;
     private Integer xp;
+    private Integer skillPoints;
     private Integer level;
     private Integer mana;
     private Integer streak; //racha
