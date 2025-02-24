@@ -21,7 +21,7 @@ public class User {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-    @Column(name = "id_u")
+    @Column(name = "id_user")
     private Long id;
 
     @NaturalId
@@ -91,8 +91,8 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "user_skills",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_skill")
     )
     private Set<Skill> skills = new HashSet<>();
 

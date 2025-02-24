@@ -17,7 +17,7 @@ public class JournalEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_entry")
+    @Column(name = "id_journal_entry")
     private Long id;
 
     @Column(name = "edited_at")
@@ -31,11 +31,11 @@ public class JournalEntry {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "journal_id", nullable = false)
+    @JoinColumn(name = "id_journal", nullable = false)
     private Journal journal;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
 }

@@ -29,8 +29,9 @@ public class Effect {     //ESTA ENTIDAD NO SE ASOCIA CON USUARIO! ENTIDAD GLOBA
     private String type; // mental, physical, emotional, social, creative, all
 
 
+    //por ejemplo si el efecto afecta a proyectos, habitos, tareas etc... se apunta en ese array.
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "effect_target_entities", joinColumns = @JoinColumn(name = "effect_id"))
+    @CollectionTable(name = "effect_target_entities", joinColumns = @JoinColumn(name = "id_effect"))
     @Column(name = "entity_name")
     private Set<String> targetEntities = new HashSet<>();
 

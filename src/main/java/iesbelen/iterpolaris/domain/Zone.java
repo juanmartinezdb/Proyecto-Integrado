@@ -17,6 +17,8 @@ import java.util.Set;
 public class Zone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_zone")
+
     private Long id;
 
     private String name;
@@ -32,7 +34,7 @@ public class Zone {
 
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "zone_types", joinColumns = @JoinColumn(name = "zone_id"))
+    @CollectionTable(name = "zone_types", joinColumns = @JoinColumn(name = "id_zone"))
     @Column(name = "zone_type")
     private Set<String> zoneTypes = new HashSet<>(); // "MENTAL, PHYSICAL, EMOTIONAL, SOCIAL, CREATIVE" solo se pueden tener entre 1 y 2 por Zona!
 
@@ -51,7 +53,7 @@ public class Zone {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
 }

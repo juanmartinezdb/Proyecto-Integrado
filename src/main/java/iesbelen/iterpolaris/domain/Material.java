@@ -16,6 +16,7 @@ import java.util.Set;
 public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_material")
     private Long id;
 
     private String name;
@@ -26,7 +27,7 @@ public class Material {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
 

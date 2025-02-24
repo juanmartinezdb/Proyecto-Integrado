@@ -34,15 +34,19 @@ public class Habit {
     private Integer totalCheck;    // Total veces completado
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_effect", nullable = false)
+    private Effect effect;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "zone_id")
+    @JoinColumn(name = "id_zone")
     private Zone zone;
 
     @ManyToMany(mappedBy = "habits")
     private Set<Project> projects = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
 }

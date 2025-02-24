@@ -29,6 +29,6 @@ public class Gear {
     private String rarity;         // para darle flavor y usar unos colores u otros
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "effect_id", nullable = false)
+    @JoinColumn(name = "id_effect", nullable = false)
     private Effect effect;
-}l
+}

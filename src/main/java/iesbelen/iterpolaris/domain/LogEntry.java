@@ -33,8 +33,12 @@ public class LogEntry {
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_zone", nullable = false)
+    private Zone zone;
 
     //    @Column(name = "productivity_percentage")
 //    private Integer productivityPercentage;

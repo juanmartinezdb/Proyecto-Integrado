@@ -22,11 +22,11 @@ public class InventoryItem {
     private LocalDateTime acquiredAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "gear_id", nullable = false)
+    @JoinColumn(name = "id_gear", nullable = false)
     private Gear gear;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
 

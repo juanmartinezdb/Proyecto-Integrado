@@ -20,6 +20,8 @@ public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_project")
+
     private Long id;
 
     private String name;
@@ -47,15 +49,15 @@ public class Project {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "zone_id")
+    @JoinColumn(name = "id_zone")
     private Zone zone;
 
 
     @ManyToMany
     @JoinTable(
             name = "project_materials",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "material_id")
+            joinColumns = @JoinColumn(name = "id_project"),
+            inverseJoinColumns = @JoinColumn(name = "id_material")
     )
     private Set<Material> materials = new HashSet<>();
 

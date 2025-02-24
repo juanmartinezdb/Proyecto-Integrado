@@ -42,16 +42,16 @@ public class Task {
     private Boolean active;               // Activa o pausada
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "id_project")
     private Project project;
 
     //REFLEXIVA!
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_task_id") //se entiende que es opcional
+    @JoinColumn(name = "id_parent_task") //se entiende que es opcional
     private Task parentTask;
 
     @OneToMany(mappedBy = "parentTask", cascade = CascadeType.ALL, orphanRemoval = true)
