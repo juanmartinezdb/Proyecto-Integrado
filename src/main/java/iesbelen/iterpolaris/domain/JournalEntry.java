@@ -19,11 +19,12 @@ public class JournalEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_journal_entry")
     private Long id;
+    private Boolean deleted;
 
     @Column(name = "edited_at")
     private LocalDate editedAt;
 
-    @Lob
+    @Lob //se usa lob para guardar textos largos
     private String content;
 
     private Integer points;

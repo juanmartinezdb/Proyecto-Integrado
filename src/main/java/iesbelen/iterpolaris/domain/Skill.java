@@ -19,7 +19,7 @@ public class Skill {     //ESTA ENTIDAD NO SE ASOCIA CON USUARIO! ENTIDAD GLOBAL
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_skill")
     private Long id;
-
+    private Boolean deleted;
     private String name;
     private String description;
     private String type;   // mental, physical, emotional, social, creative, all

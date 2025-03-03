@@ -18,6 +18,8 @@ public class InventoryItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_inventory_item")
     private Long id;
+    private Boolean deleted;
+
     private Integer remainingUses; // usos restantes
     private LocalDateTime acquiredAt;
 

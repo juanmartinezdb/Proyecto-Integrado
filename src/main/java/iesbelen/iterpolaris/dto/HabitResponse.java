@@ -1,0 +1,27 @@
+package iesbelen.iterpolaris.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class HabitResponse {
+    private Long id;
+    private String name;
+    private String description;
+    private String image;
+    private Boolean active;
+    private Integer energy;
+    private Integer points;
+    private Integer xp;
+    private String frequency;
+    private Integer streak;
+    private Integer totalCheck;
+    private Long zoneId;
+    private Long userId;
+    private Long effectId;
+}

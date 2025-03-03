@@ -17,6 +17,8 @@ public class Gear {
     @Column(name = "id_gear")
     private Long id;
 
+    private Boolean deleted;
+
     private String name;
     private String description;
     private String image;

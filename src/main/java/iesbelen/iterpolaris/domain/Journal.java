@@ -21,6 +21,7 @@ public class Journal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_journal")
     private Long id;
+    private Boolean deleted;
 
     private String name;
 

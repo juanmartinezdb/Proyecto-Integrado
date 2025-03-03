@@ -18,7 +18,7 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_material")
     private Long id;
-
+    private Boolean deleted;
     private String name;
     private String type; //"documento", "link", "video", lo que sea es mas que nada para asignarle un icono en el front.
     private String image; //puede que se la quite

@@ -23,14 +23,14 @@ public class Project {
     @Column(name = "id_project")
 
     private Long id;
-
+    private Boolean deleted;
     private String name;
     private String description;
 
     @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = true)
     private LocalDate endDate;
 
     @Column(name = "created_at")

@@ -20,6 +20,8 @@ public class Habit {
     @Column(name = "id_habit")
     private Long id;
 
+    private Boolean deleted;
+
     private String name;
     private String description;
     private String image;

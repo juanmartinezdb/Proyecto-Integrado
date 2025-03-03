@@ -4,9 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.java.Log;
 import org.hibernate.annotations.NaturalId;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,13 +21,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode( of = "username")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     @Column(name = "id_user")
     private Long id;
-
+    private Boolean deleted = false;
     @NaturalId
     @Column (nullable = false, unique = true)
     private String username;
@@ -98,6 +102,40 @@ public class User {
     private Set<Skill> skills = new HashSet<>();
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return !deleted;
+    }
     //posible expansión STYLES, STATISTICS, NOTIFICATIONS, ACHIEVEMENTS, REGISTRO DE ACCESOS, LA TIENDA PARA PLANTILLAS Y CLANES.
 
     //    private String accountStatus;       //"ACTIVE", "BLOCKED", "INACTIVE",... (en vistas a la mejorada)

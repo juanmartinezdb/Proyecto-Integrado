@@ -17,7 +17,7 @@ public class LogEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_log")
     private Long id;
-
+    private Boolean deleted;
 
     private Integer points;
 

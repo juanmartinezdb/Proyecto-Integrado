@@ -20,7 +20,7 @@ public class Zone {
     @Column(name = "id_zone")
 
     private Long id;
-
+    private Boolean deleted;
     private String name;
     private String description;
     private String image;

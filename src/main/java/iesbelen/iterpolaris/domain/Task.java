@@ -20,7 +20,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_task")
     private Long id;
-
+    private Boolean deleted;
     private String name;
     private String description;
     private String image;

@@ -21,6 +21,8 @@ public class Effect {     //ESTA ENTIDAD NO SE ASOCIA CON USUARIO! ENTIDAD GLOBA
     @Column(name = "id_effect")
     private Long id;
 
+    private Boolean deleted;
+
     private String name;
     private String logicKey;
     private String description;
