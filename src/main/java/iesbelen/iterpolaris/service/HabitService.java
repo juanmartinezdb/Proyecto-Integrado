@@ -41,7 +41,7 @@ public class HabitService {
 
         Effect effect = null;
         if (request.getEffectId() != null) {
-            effect = effectRepository.findById(request.getEffectId())
+            effect = effectRepository.findByIdAndDeletedFalse(request.getEffectId())
                     .orElseThrow(() -> new RuntimeException("Efecto no encontrado"));
         }
 

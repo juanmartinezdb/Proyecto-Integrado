@@ -11,22 +11,27 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Servicio que maneja la lógica de usuarios y que
+ * además se usa como UserDetailsService para Spring Security.
+ */
 @Service
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Para registrar un usuario
     public void register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("El usuario ya existe");
         }
-
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("El correo ya está registrado");
         }
@@ -35,6 +40,7 @@ public class UserService implements UserDetailsService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                // Por defecto, registramos como "USER". Si queremos admin lo ponemos manual.
                 .role("USER")
                 .deleted(false)
                 .build();
@@ -42,6 +48,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    // Otros métodos de manejo de usuarios
     public User getUserById(Long id) {
         return userRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -69,9 +76,14 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    /**
+     * Método que usa Spring Security cuando se hace login.
+     * Debe devolver un UserDetails a partir del username.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
     }
 }

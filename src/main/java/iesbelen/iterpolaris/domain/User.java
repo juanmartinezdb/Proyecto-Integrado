@@ -2,12 +2,10 @@ package iesbelen.iterpolaris.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.extern.java.Log;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode( of = "username")
+@EqualsAndHashCode(of = "username")
 public class User implements UserDetails {
 
     @Id
@@ -42,7 +40,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private String role;                //"ADMIN", "USER"
+    // Ponemos "USER" o "ADMIN", y Spring Security internamente usa "ROLE_ADMIN" y "ROLE_USER".
+    private String role;
 
     private LocalDateTime createdAt;
 
@@ -101,20 +100,10 @@ public class User implements UserDetails {
     )
     private Set<Skill> skills = new HashSet<>();
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
+        // Devolvemos un GrantedAuthority con "ROLE_" + role
+        return Collections.singletonList(() -> "ROLE_" + role);
     }
 
     @Override
@@ -134,7 +123,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !deleted;
+        return !Boolean.TRUE.equals(deleted);
     }
     //posible expansión STYLES, STATISTICS, NOTIFICATIONS, ACHIEVEMENTS, REGISTRO DE ACCESOS, LA TIENDA PARA PLANTILLAS Y CLANES.
 

@@ -36,8 +36,8 @@ public class Habit {
     private Integer totalCheck;    // Total veces completado
 
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_effect", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_effect", nullable = true)
     private Effect effect;
 
 

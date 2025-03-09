@@ -19,5 +19,5 @@ public class HabitRequest {
     private Integer xp;
     private String frequency; // "DAILY", "WEEKLY", "MONTHLY"
     private Long zoneId;
-    private Long effectId; // Por si necesitas asociarlo a un Effect
+    private Long effectId;
 }
