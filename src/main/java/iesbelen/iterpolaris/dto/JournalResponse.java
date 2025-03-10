@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -20,5 +21,7 @@ public class JournalResponse {
     private String type;
     private LocalDateTime createdAt;
     private Long userId;
+    private LocalDate lastEntryDate; // Nueva propiedad para rastrear la última entrada
+    private Integer streak; // Racha de días consecutivos escribiendo
     private Set<Long> entriesIds;
 }

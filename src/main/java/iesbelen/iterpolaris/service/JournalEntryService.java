@@ -12,17 +12,19 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
 public class JournalEntryService {
 
     private final JournalEntryRepository journalEntryRepository;
     private final JournalRepository journalRepository;
+    private final LevelService levelService;
 
     public JournalEntryService(JournalEntryRepository journalEntryRepository,
-                               JournalRepository journalRepository) {
+                               JournalRepository journalRepository,
+                               LevelService levelService) {
         this.journalEntryRepository = journalEntryRepository;
         this.journalRepository = journalRepository;
+        this.levelService = levelService;
     }
 
     public JournalEntryResponse createEntry(User user, Long journalId, JournalEntryRequest request) {
@@ -32,17 +34,38 @@ public class JournalEntryService {
             throw new RuntimeException("No tienes acceso a este Journal");
         }
 
+        LocalDate today = LocalDate.now();
+        LocalDate lastEntryDate = journal.getLastEntryDate();
+
+        // Verificar si la entrada es consecutiva
+        if (lastEntryDate != null && lastEntryDate.plusDays(1).equals(today)) {
+            journal.setStreak(journal.getStreak() + 1);
+        } else if (lastEntryDate == null || !lastEntryDate.equals(today)) {
+            journal.setStreak(1); // Reinicia la racha si no es el día siguiente
+        }
+
+        journal.setLastEntryDate(today); // Actualizar la última fecha de entrada
+        journalRepository.save(journal);
+
         JournalEntry entry = JournalEntry.builder()
                 .content(request.getContent())
-                .editedAt(LocalDate.now())
+                .editedAt(today)
                 .points(request.getPoints())
-                .xp(request.getXp())
+                .challengeLevel(request.getChallengeLevel()) // Se usa ChallengeLevel en lugar de XP
                 .deleted(false)
                 .journal(journal)
                 .user(user)
                 .build();
 
         JournalEntry saved = journalEntryRepository.save(entry);
+
+        // Calcular XP con el multiplicador de racha
+        double multiplier = 1.0 + (Math.min(journal.getStreak(), 10) * 0.1); // Máximo x2 con racha de 10
+        int xpGained = (int) (entry.getChallengeLevel().getXpValue() * multiplier);
+
+        // Otorgar XP al usuario
+        levelService.addXPToUser(user, xpGained);
+
         return mapToResponse(saved);
     }
 
@@ -78,7 +101,7 @@ public class JournalEntryService {
 
         entry.setContent(request.getContent());
         entry.setPoints(request.getPoints());
-        entry.setXp(request.getXp());
+        entry.setChallengeLevel(request.getChallengeLevel());
         entry.setEditedAt(LocalDate.now());
 
         JournalEntry updated = journalEntryRepository.save(entry);
@@ -102,7 +125,7 @@ public class JournalEntryService {
                 .content(entry.getContent())
                 .editedAt(entry.getEditedAt())
                 .points(entry.getPoints())
-                .xp(entry.getXp())
+                .challengeLevel(entry.getChallengeLevel()) // Agregado en el response
                 .userId(entry.getUser().getId())
                 .journalId(entry.getJournal().getId())
                 .build();

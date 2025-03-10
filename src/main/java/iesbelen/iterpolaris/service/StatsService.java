@@ -1,6 +1,5 @@
 package iesbelen.iterpolaris.service;
 
-
 import iesbelen.iterpolaris.domain.LogEntry;
 import iesbelen.iterpolaris.domain.User;
 import iesbelen.iterpolaris.domain.Zone;
@@ -25,18 +24,21 @@ public class StatsService {
         return entries.stream().mapToInt(LogEntry::getEnergy).sum();
     }
 
-    // Calcula XP total del usuario en un rango
+    // Calcula XP total del usuario en un rango basado en challengeLevel
     public int calculateUserXp(User user, LocalDate fromDate) {
         List<LogEntry> entries = logEntryRepository.findByUserAndDeletedFalseAndEndTimestampGreaterThanEqual(user, fromDate);
-        return entries.stream().mapToInt(LogEntry::getPoints).sum();
-        // o .mapToInt(LogEntry::getXp) si tuvieras xp en LogEntry
+        return entries.stream().mapToInt(entry -> entry.getChallengeLevel().getXpValue()).sum();
     }
 
-    // Zona
+    // Calcula energía total de una zona en un rango de tiempo
     public int calculateZoneEnergy(Zone zone, LocalDate fromDate) {
         List<LogEntry> entries = logEntryRepository.findByZoneAndDeletedFalseAndEndTimestampGreaterThanEqual(zone, fromDate);
         return entries.stream().mapToInt(LogEntry::getEnergy).sum();
     }
 
-    // O crea un método genérico para "points, xp, etc."
+    // Calcula XP total de una zona en un rango de tiempo basado en challengeLevel
+    public int calculateZoneXp(Zone zone, LocalDate fromDate) {
+        List<LogEntry> entries = logEntryRepository.findByZoneAndDeletedFalseAndEndTimestampGreaterThanEqual(zone, fromDate);
+        return entries.stream().mapToInt(entry -> entry.getChallengeLevel().getXpValue()).sum();
+    }
 }

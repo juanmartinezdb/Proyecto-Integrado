@@ -36,6 +36,9 @@ public class Habit {
     private Integer totalCheck;    // Total veces completado
 
 
+    @Enumerated(EnumType.STRING)
+    private ChallengeLevel challengeLevel;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_effect", nullable = true)
     private Effect effect;
@@ -51,4 +54,9 @@ public class Habit {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
+
+    public int calculateXP() {
+        double multiplier = 1.0 + (Math.min(streak, 10) * 0.1); // Máximo x2 con racha de 10
+        return (int) (challengeLevel.getXpValue() * multiplier);
+    }
 }

@@ -61,4 +61,12 @@ public class HabitController {
         habitService.deleteHabit(user, id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Void> completeHabit(@AuthenticationPrincipal UserDetails userDetails,
+                                              @PathVariable Long id) {
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        habitService.completeHabit(user, id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -16,13 +16,16 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ZoneRepository zoneRepository;
     private final JournalRepository journalRepository;
+    private final LevelService levelService;
 
     public ProjectService(ProjectRepository projectRepository,
                           ZoneRepository zoneRepository,
-                          JournalRepository journalRepository) {
+                          JournalRepository journalRepository,
+                          LevelService levelService) {
         this.projectRepository = projectRepository;
         this.zoneRepository = zoneRepository;
         this.journalRepository = journalRepository;
+        this.levelService = levelService;
     }
 
     // ====================== CREATE ======================
@@ -51,7 +54,6 @@ public class ProjectService {
                 .endDate(request.getEndDate())
                 .createdAt(LocalDateTime.now())
                 .points(request.getPoints())
-                .xp(request.getXp())
                 .image(request.getImage())
                 .icon(request.getIcon())
                 .color(request.getColor())
@@ -60,6 +62,7 @@ public class ProjectService {
                 .zone(zone)
                 .user(user)
                 .journal(journal)
+                .challengeLevel(request.getChallengeLevel()) // Se usa ChallengeLevel en lugar de XP
                 .deleted(false)
                 .build();
 
@@ -105,6 +108,7 @@ public class ProjectService {
         project.setColor(request.getColor());
         project.setStatus(request.getStatus());
         project.setPriority(request.getPriority());
+        project.setChallengeLevel(request.getChallengeLevel());
 
         if (request.getZoneId() != null) {
             Zone zone = zoneRepository.findByIdAndDeletedFalse(request.getZoneId())
@@ -134,6 +138,23 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
+    // ====================== COMPLETAR PROYECTO ======================
+    public void completeProject(User user, Long projectId) {
+        Project project = projectRepository.findByIdAndDeletedFalse(projectId)
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+
+        if (!project.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("No tienes acceso a este proyecto");
+        }
+
+        project.setStatus("COMPLETED");
+        projectRepository.save(project);
+
+        // Asignar XP al usuario
+        int xpGained = project.getChallengeLevel().getXpValue();
+        levelService.addXPToUser(user, xpGained);
+    }
+
     // ====================== Map Entity -> DTO ======================
     private ProjectResponse mapToResponse(Project project) {
         return ProjectResponse.builder()
@@ -144,13 +165,13 @@ public class ProjectService {
                 .endDate(project.getEndDate())
                 .createdAt(project.getCreatedAt())
                 .points(project.getPoints())
-                .xp(project.getXp())
                 .image(project.getImage())
                 .icon(project.getIcon())
                 .color(project.getColor())
                 .status(project.getStatus())
                 .priority(project.getPriority())
-                .zoneId(project.getZone().getId())
+                .challengeLevel(project.getChallengeLevel()) // Agregado en la respuesta
+                .zoneId(project.getZone() != null ? project.getZone().getId() : null)
                 .userId(project.getUser().getId())
                 .build();
     }

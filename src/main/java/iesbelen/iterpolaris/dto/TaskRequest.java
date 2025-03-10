@@ -1,5 +1,8 @@
 package iesbelen.iterpolaris.dto;
 
+import iesbelen.iterpolaris.domain.ChallengeLevel;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +21,8 @@ public class TaskRequest {
     private String status;          // "PENDING", "IN_PROGRESS", "COMPLETED", "CANCELLED"
     private Integer energy;
     private Integer points;
-    private Integer xp;
+    @Enumerated(EnumType.STRING)
+    private ChallengeLevel challengeLevel;
     private String priority;        // "HIGH", "MEDIUM", "LOW"
     private String cycle;           // "NONE", "DAILY", "WEEKLY", "MONTHLY"
     private LocalDate startDate;

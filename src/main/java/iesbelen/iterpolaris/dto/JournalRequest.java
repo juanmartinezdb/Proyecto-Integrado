@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,4 +16,6 @@ public class JournalRequest {
     private String description;
     private String image;
     private String type; // "mental", "physical", "emotional", "creative", "social"
+    private LocalDate lastEntryDate; // Nueva propiedad para rastrear la última entrada
+    private Integer streak; // Racha de días consecutivos escribiendo
 }

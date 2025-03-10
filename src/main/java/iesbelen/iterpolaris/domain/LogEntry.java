@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode( of = "id")
+@EqualsAndHashCode(of = "id")
 public class LogEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,18 +19,18 @@ public class LogEntry {
     private Long id;
     private Boolean deleted;
 
-    private Integer points;
+    @Enumerated(EnumType.STRING)
+    private ChallengeLevel challengeLevel; // Nuevo campo para registrar la dificultad de la actividad
 
-    private String type; // "TASK", "HABIT", "JOURNAL_ENTRY", "PROJECT" IMPORTANTE!!!!!!!!!
+    private String type; // "TASK", "HABIT", "JOURNAL_ENTRY", "PROJECT"
 
-    @Column(name = "item_id") //del objeto que registra
+    @Column(name = "item_id") // ID del objeto registrado
     private Long itemId;
 
     @Column(name = "end_timestamp")
     private LocalDate endTimestamp;
 
     private Integer energy;
-
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
@@ -39,9 +39,4 @@ public class LogEntry {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_zone", nullable = false)
     private Zone zone;
-
-    //    @Column(name = "productivity_percentage")
-//    private Integer productivityPercentage;
-
-//    private String otros; //se que me falta meter algun dato mas al registro seguro
 }

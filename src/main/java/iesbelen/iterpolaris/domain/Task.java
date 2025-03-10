@@ -28,9 +28,12 @@ public class Task {
     private String status;          // "PENDING", "IN_PROGRESS", "COMPLETED", "CANCELLED"
     private Integer energy;
     private Integer points;
-    private Integer xp;
     private String priority;        // "HIGH", "MEDIUM", "LOW"
     private String cycle;           // "NONE", "DAILY", "WEEKLY", "MONTHLY"
+
+//    private Integer xp;
+    @Enumerated(EnumType.STRING)
+    private ChallengeLevel challengeLevel;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -56,4 +59,8 @@ public class Task {
 
     @OneToMany(mappedBy = "parentTask", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Task> subTasks = new HashSet<>();
+
+    public int calculateXP() {
+        return challengeLevel.getXpValue();
+    }
 }

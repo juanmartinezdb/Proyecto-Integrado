@@ -37,7 +37,10 @@ public class Project {
     private LocalDateTime createdAt;
 
     private Integer points;
-    private Integer xp;
+//    private Integer xp;
+
+    @Enumerated(EnumType.STRING)
+    private ChallengeLevel challengeLevel;
 
     private String image;
     private String icon;
@@ -84,5 +87,7 @@ public class Project {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
+    public int calculateXP() {
+        return challengeLevel.getXpValue();
+    }
 }

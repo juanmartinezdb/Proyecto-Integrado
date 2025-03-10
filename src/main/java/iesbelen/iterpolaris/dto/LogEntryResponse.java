@@ -1,5 +1,6 @@
 package iesbelen.iterpolaris.dto;
 
+import iesbelen.iterpolaris.domain.ChallengeLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class LogEntryResponse {
     private Long id;
-    private Integer points;
+    private ChallengeLevel challengeLevel; // Se usa ChallengeLevel en lugar de points
     private String type;
     private Long itemId;
     private LocalDate endTimestamp;

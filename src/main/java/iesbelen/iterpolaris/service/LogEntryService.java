@@ -1,8 +1,6 @@
 package iesbelen.iterpolaris.service;
 
-import iesbelen.iterpolaris.domain.LogEntry;
-import iesbelen.iterpolaris.domain.User;
-import iesbelen.iterpolaris.domain.Zone;
+import iesbelen.iterpolaris.domain.*;
 import iesbelen.iterpolaris.dto.LogEntryRequest;
 import iesbelen.iterpolaris.dto.LogEntryResponse;
 import iesbelen.iterpolaris.repository.LogEntryRepository;
@@ -17,11 +15,14 @@ public class LogEntryService {
 
     private final LogEntryRepository logEntryRepository;
     private final ZoneRepository zoneRepository;
+    private final LevelService levelService;
 
     public LogEntryService(LogEntryRepository logEntryRepository,
-                           ZoneRepository zoneRepository) {
+                           ZoneRepository zoneRepository,
+                           LevelService levelService) {
         this.logEntryRepository = logEntryRepository;
         this.zoneRepository = zoneRepository;
+        this.levelService = levelService;
     }
 
     // Crear registro de actividad
@@ -34,7 +35,7 @@ public class LogEntryService {
         }
 
         LogEntry entry = LogEntry.builder()
-                .points(request.getPoints())
+                .challengeLevel(request.getChallengeLevel()) // Se usa ChallengeLevel en lugar de puntos fijos
                 .type(request.getType())
                 .itemId(request.getItemId())
                 .endTimestamp(request.getEndTimestamp())
@@ -45,6 +46,11 @@ public class LogEntryService {
                 .build();
 
         LogEntry saved = logEntryRepository.save(entry);
+
+        // Otorgar XP al usuario según el ChallengeLevel
+        int xpGained = entry.getChallengeLevel().getXpValue();
+        levelService.addXPToUser(user, xpGained);
+
         return mapToResponse(saved);
     }
 
@@ -55,8 +61,6 @@ public class LogEntryService {
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
-
-    // Podríamos agregar métodos para filtrar por fecha, tipo, etc.
 
     // Borrado lógico
     public void deleteLogEntry(User user, Long logId) {
@@ -72,7 +76,7 @@ public class LogEntryService {
     private LogEntryResponse mapToResponse(LogEntry entry) {
         return LogEntryResponse.builder()
                 .id(entry.getId())
-                .points(entry.getPoints())
+                .challengeLevel(entry.getChallengeLevel()) // Agregado en la respuesta
                 .type(entry.getType())
                 .itemId(entry.getItemId())
                 .endTimestamp(entry.getEndTimestamp())

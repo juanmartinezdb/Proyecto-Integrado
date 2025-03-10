@@ -4,6 +4,7 @@ package iesbelen.iterpolaris.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +33,9 @@ public class Journal {
     private String image;
     private String type; // "mental", "physical", "emotional", "creative", "social"
 
+    @Column(name = "last_entry_date")
+    private LocalDate lastEntryDate; // Nueva propiedad para rastrear la última entrada
+    private Integer streak; // Racha de días consecutivos escribiendo
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)

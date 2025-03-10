@@ -61,4 +61,12 @@ public class TaskController {
         taskService.deleteTask(user, id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Void> completeTask(@AuthenticationPrincipal UserDetails userDetails,
+                                             @PathVariable Long id) {
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        taskService.completeTask(user, id);
+        return ResponseEntity.noContent().build();
+    }
 }

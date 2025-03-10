@@ -28,8 +28,9 @@ public class JournalEntry {
     private String content;
 
     private Integer points;
-    private Integer xp;
-
+//    private Integer xp;
+    @Enumerated(EnumType.STRING)
+    private ChallengeLevel challengeLevel;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_journal", nullable = false)

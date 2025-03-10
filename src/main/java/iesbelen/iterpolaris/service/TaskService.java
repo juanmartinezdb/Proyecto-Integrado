@@ -10,7 +10,6 @@ import iesbelen.iterpolaris.repository.ZoneRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,13 +20,18 @@ public class TaskService {
     private final ProjectRepository projectRepository;
     private final LogEntryRepository logEntryRepository;
     private final ZoneRepository zoneRepository;
+    private final LevelService levelService;
 
     public TaskService(TaskRepository taskRepository,
-                       ProjectRepository projectRepository, LogEntryRepository logEntryRepository, ZoneRepository zoneRepository) {
+                       ProjectRepository projectRepository,
+                       LogEntryRepository logEntryRepository,
+                       ZoneRepository zoneRepository,
+                       LevelService levelService) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
         this.logEntryRepository = logEntryRepository;
         this.zoneRepository = zoneRepository;
+        this.levelService = levelService;
     }
 
     public TaskResponse createTask(User user, TaskRequest request) {
@@ -56,12 +60,12 @@ public class TaskService {
                 .status(request.getStatus())
                 .energy(request.getEnergy())
                 .points(request.getPoints())
-                .xp(request.getXp())
                 .priority(request.getPriority())
                 .cycle(request.getCycle())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .active(request.getActive())
+                .challengeLevel(request.getChallengeLevel()) // Se usa el nivel de desafío en lugar de XP
                 .user(user)
                 .project(project)
                 .parentTask(parentTask)
@@ -101,12 +105,12 @@ public class TaskService {
         task.setStatus(request.getStatus());
         task.setEnergy(request.getEnergy());
         task.setPoints(request.getPoints());
-        task.setXp(request.getXp());
         task.setPriority(request.getPriority());
         task.setCycle(request.getCycle());
         task.setStartDate(request.getStartDate());
         task.setEndDate(request.getEndDate());
         task.setActive(request.getActive());
+        task.setChallengeLevel(request.getChallengeLevel());
 
         if (request.getProjectId() != null) {
             Project project = projectRepository.findByIdAndDeletedFalse(request.getProjectId())
@@ -143,6 +147,7 @@ public class TaskService {
         task.setDeleted(true);
         taskRepository.save(task);
     }
+
     public void completeTask(User user, Long taskId) {
         Task task = taskRepository.findByIdAndDeletedFalse(taskId)
                 .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
@@ -150,19 +155,23 @@ public class TaskService {
             throw new RuntimeException("No tienes acceso a esta tarea");
         }
 
-        // Marcamos la tarea como COMPLETED
+        // Marcar la tarea como completada
         task.setStatus("COMPLETED");
         taskRepository.save(task);
 
-        // Creamos el LogEntry
+        // Calcular XP basado en ChallengeLevel
+        int xpGained = task.getChallengeLevel().getXpValue();
+        levelService.addXPToUser(user, xpGained);
+
+        // Registrar la actividad en LogEntry
         LogEntry log = LogEntry.builder()
                 .energy(task.getEnergy())
-                .points(task.getPoints()) // o xp si lo guardas en "points"
+                .challengeLevel(task.getChallengeLevel()) // Se usa ChallengeLevel
                 .type("TASK")
                 .itemId(task.getId())
                 .endTimestamp(LocalDate.now())
                 .user(user)
-                .zone(task.getProject() != null ? task.getProject().getZone() : getDefaultZone(user)) //que pasa con este metodo?
+                .zone(task.getProject() != null ? task.getProject().getZone() : getDefaultZone(user))
                 .deleted(false)
                 .build();
         logEntryRepository.save(log);
@@ -171,7 +180,7 @@ public class TaskService {
     private Zone getDefaultZone(User user) {
         return zoneRepository.findByUserAndDeletedFalse(user)
                 .stream()
-                .findFirst() // Si el usuario tiene zonas, tomamos la primera
+                .findFirst()
                 .orElseThrow(() -> new RuntimeException("No hay zona predeterminada para este usuario"));
     }
 
@@ -184,12 +193,12 @@ public class TaskService {
                 .status(task.getStatus())
                 .energy(task.getEnergy())
                 .points(task.getPoints())
-                .xp(task.getXp())
                 .priority(task.getPriority())
                 .cycle(task.getCycle())
                 .startDate(task.getStartDate())
                 .endDate(task.getEndDate())
                 .active(task.getActive())
+                .challengeLevel(task.getChallengeLevel()) // Agregado en el response
                 .userId(task.getUser().getId())
                 .projectId(task.getProject() != null ? task.getProject().getId() : null)
                 .parentTaskId(task.getParentTask() != null ? task.getParentTask().getId() : null)

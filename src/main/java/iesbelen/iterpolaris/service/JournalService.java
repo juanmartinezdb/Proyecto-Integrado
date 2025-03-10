@@ -27,6 +27,8 @@ public class JournalService {
                 .image(request.getImage())
                 .type(request.getType())
                 .createdAt(LocalDateTime.now())
+                .streak(0) // Inicializamos la racha en 0
+                .lastEntryDate(null) // Aún no tiene entradas
                 .deleted(false)
                 .user(user)
                 .build();
@@ -86,6 +88,8 @@ public class JournalService {
                 .image(journal.getImage())
                 .type(journal.getType())
                 .createdAt(journal.getCreatedAt())
+                .streak(journal.getStreak()) // Agregado para mostrar la racha
+                .lastEntryDate(journal.getLastEntryDate()) // Agregado para mostrar la última fecha de entrada
                 .userId(journal.getUser().getId())
                 .entriesIds(journal.getEntries().stream().map(e -> e.getId()).collect(Collectors.toSet()))
                 .build();

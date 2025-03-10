@@ -67,4 +67,13 @@ public class ProjectController {
         projectService.deleteProject(user, id);
         return ResponseEntity.noContent().build();
     }
+
+    // POST /projects/{id}/complete
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Void> completeProject(@AuthenticationPrincipal UserDetails userDetails,
+                                                @PathVariable Long id) {
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        projectService.completeProject(user, id);
+        return ResponseEntity.noContent().build();
+    }
 }
