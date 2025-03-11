@@ -1,0 +1,16 @@
+<div class="project-list">
+  <h2>Mis Proyectos</h2>
+  @if (projects.length > 0) {
+    <ul>
+      @for (project of projects; track project.id) {
+        <li>
+          <a [routerLink]="['/app/projects', project.id]">
+            {{ project.name }} - {{ project.status }}
+          </a>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes proyectos aún.</p>
+  }
+</div>

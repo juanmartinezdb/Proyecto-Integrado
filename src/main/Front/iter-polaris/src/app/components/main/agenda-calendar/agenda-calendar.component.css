@@ -1,0 +1,19 @@
+.agenda-calendar {
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  vertical-align: top;
+  text-align: left;
+}
+
+td {
+  height: 100px;
+}

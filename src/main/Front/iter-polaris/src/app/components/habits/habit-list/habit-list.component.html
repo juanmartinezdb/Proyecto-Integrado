@@ -1,0 +1,16 @@
+<div class="habit-list">
+  <h2>Mis Hábitos</h2>
+  @if (habits.length > 0) {
+    <ul>
+      @for (habit of habits; track habit.id) {
+        <li>
+          <a [routerLink]="['/app/habits', habit.id]">
+            {{ habit.name }} - {{ habit.frequency }}
+          </a>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes hábitos aún.</p>
+  }
+</div>

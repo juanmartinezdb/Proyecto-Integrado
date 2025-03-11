@@ -1,0 +1,15 @@
+<div class="agenda-list">
+  <h2>Próximos Eventos</h2>
+  @if (events.length > 0) {
+    <ul>
+      @for (event of events; track event.id) {
+        <li>
+          <strong>{{ event.title }}</strong> - {{ event.date }}
+          <p>{{ event.description }}</p>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes eventos próximos.</p>
+  }
+</div>

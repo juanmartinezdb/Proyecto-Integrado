@@ -1,8 +1,9 @@
 <div class="layout-container">
-  <header>
-    <h1>Iter Polaris</h1>
-  </header>
-  <main>
-    <router-outlet></router-outlet>
-  </main>
+  <app-top-nav></app-top-nav>
+  <div class="content-container">
+    <app-side-bar></app-side-bar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

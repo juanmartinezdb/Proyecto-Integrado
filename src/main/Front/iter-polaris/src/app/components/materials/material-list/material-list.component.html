@@ -1,0 +1,16 @@
+<div class="material-list">
+  <h2>Materiales</h2>
+  <button class="btn btn-success" [routerLink]="['/app/materials/create']">Nuevo Material</button>
+  @if (materials.length > 0) {
+    <ul>
+      @for (material of materials; track material.id) {
+        <li>
+          <strong>{{ material.name }}</strong> - {{ material.quantity }} unidades
+          <button class="btn btn-primary" [routerLink]="['/app/materials', material.id, 'edit']">Editar</button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No hay materiales registrados.</p>
+  }
+</div>

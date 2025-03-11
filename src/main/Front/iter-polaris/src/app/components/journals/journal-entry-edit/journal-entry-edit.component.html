@@ -1,0 +1,13 @@
+<div class="journal-entry-edit">
+  <h2>Editar Entrada</h2>
+  <form [formGroup]="formu" (submit)="submit()">
+
+    <label for="title">Título</label>
+    <input type="text" id="title" class="form-control" formControlName="title">
+
+    <label for="content">Contenido</label>
+    <textarea id="content" class="form-control" formControlName="content"></textarea>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+  </form>
+</div>

@@ -1,11 +1,18 @@
-export interface InventoryItemRequest {
-  gearId: number;
-  remainingUses?: number;
+export interface InventoryItemResponse {
+  id: number;
+  gearName: string;
+  remainingUses: number;
+  acquiredAt: string;
 }
 
-export interface InventoryItemResponse extends InventoryItemRequest {
+export interface GearResponse {
   id: number;
-  acquiredAt: string;
-  gearName?: string;
-  userId: number;
+  name: string;
+  description?: string;
+  type?: string;
+  maxUses?: number;
+  cost?: number;
+  consumable?: boolean;
+  rarity?: string;
+  effectId?: number;
 }

@@ -1,0 +1,19 @@
+<div class="calendar-settings">
+  <h2>Configuración del Calendario</h2>
+  <form [formGroup]="formu" (submit)="submit()">
+
+    <label for="startOfWeek">Día de inicio de semana</label>
+    <select id="startOfWeek" class="form-control" formControlName="startOfWeek">
+      <option value="Monday">Lunes</option>
+      <option value="Sunday">Domingo</option>
+    </select>
+
+    <label for="timeFormat">Formato de hora</label>
+    <select id="timeFormat" class="form-control" formControlName="timeFormat">
+      <option value="24h">24 horas</option>
+      <option value="12h">12 horas (AM/PM)</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+  </form>
+</div>

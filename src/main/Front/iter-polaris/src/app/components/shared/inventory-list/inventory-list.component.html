@@ -1,0 +1,15 @@
+<div class="inventory-list">
+  <h2>Inventario</h2>
+  @if (inventoryItems.length > 0) {
+    <ul>
+      @for (item of inventoryItems; track item.id) {
+        <li>
+          <strong>{{ item.gearName }}</strong> - Usos restantes: {{ item.remainingUses }}
+          <button (click)="useItem(item.id)">Usar</button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes objetos en tu inventario.</p>
+  }
+</div>

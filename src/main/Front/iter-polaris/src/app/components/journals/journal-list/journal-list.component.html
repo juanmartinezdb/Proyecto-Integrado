@@ -1,0 +1,16 @@
+<div class="journal-list">
+  <h2>Mis Diarios</h2>
+  @if (journals.length > 0) {
+    <ul>
+      @for (journal of journals; track journal.id) {
+        <li>
+          <a [routerLink]="['/app/journals', journal.id]">
+            {{ journal.name }} - {{ journal.type }}
+          </a>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes diarios aún.</p>
+  }
+</div>

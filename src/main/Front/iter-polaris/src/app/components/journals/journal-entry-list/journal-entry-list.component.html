@@ -1,0 +1,17 @@
+<div class="journal-entry-list">
+  <h2>Entradas del Diario</h2>
+  <button class="btn btn-success" [routerLink]="['/app/journals', journalId, 'entries', 'create']">Nueva Entrada</button>
+  @if (entries.length > 0) {
+    <ul>
+      @for (entry of entries; track entry.id) {
+        <li>
+          <a [routerLink]="['/app/journals', journalId, 'entries', entry.id]">
+            {{ entry.title }} - {{ entry.createdAt }}
+          </a>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No hay entradas en este diario.</p>
+  }
+</div>

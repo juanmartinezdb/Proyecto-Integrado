@@ -1,0 +1,12 @@
+<div class="zone-habits">
+  <h2>Hábitos en esta Zona</h2>
+  @if (habits.length > 0) {
+    <ul>
+      @for (habit of habits; track habit.id) {
+        <li>{{ habit.name }}</li>
+      }
+    </ul>
+  } @else {
+    <p>No hay hábitos en esta zona.</p>
+  }
+</div>

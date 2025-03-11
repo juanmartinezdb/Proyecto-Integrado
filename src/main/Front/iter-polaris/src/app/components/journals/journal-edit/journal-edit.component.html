@@ -1,0 +1,20 @@
+<div class="journal-edit">
+  <h2>Editar Diario</h2>
+  <form [formGroup]="formu" (submit)="submit()">
+
+    <label for="name">Nombre</label>
+    <input type="text" id="name" class="form-control" formControlName="name">
+
+    <label for="description">Descripción</label>
+    <textarea id="description" class="form-control" formControlName="description"></textarea>
+
+    <label for="type">Tipo</label>
+    <select id="type" class="form-control" formControlName="type">
+      <option value="Personal">Personal</option>
+      <option value="Trabajo">Trabajo</option>
+      <option value="Estudios">Estudios</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+  </form>
+</div>

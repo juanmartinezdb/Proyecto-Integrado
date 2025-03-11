@@ -1,0 +1,7 @@
+<div class="energy-balance">
+  <h3>Energia</h3>
+  <div class="energy-bar">
+    <div class="energy-fill" [style.width.%]="(energy / maxEnergy) * 100"></div>
+  </div>
+  <p>{{ energy }} / {{ maxEnergy }}</p>
+</div>

@@ -1,0 +1,18 @@
+<p>skills-list works!</p>
+<div class="skills-list">
+  <h2>Habilidades</h2>
+  @if (skills.length > 0) {
+    <ul>
+      @for (skill of skills; track skill.id) {
+        <li>
+          <strong>{{ skill.name }}</strong> - {{ skill.description }}
+          @if (!skill.acquired) {
+            <button (click)="unlockSkill(skill.id)">Desbloquear</button>
+          }
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes habilidades desbloqueadas.</p>
+  }
+</div>

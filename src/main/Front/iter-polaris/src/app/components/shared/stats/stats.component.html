@@ -1,0 +1,11 @@
+<div class="stats">
+  <h2>Estadísticas</h2>
+  @if (stats) {
+    <p><strong>XP Total:</strong> {{ stats.totalXp }}</p>
+    <p><strong>Hábitos Completados:</strong> {{ stats.habitsCompleted }}</p>
+    <p><strong>Tareas Completadas:</strong> {{ stats.tasksCompleted }}</p>
+    <p><strong>Proyectos Finalizados:</strong> {{ stats.projectsCompleted }}</p>
+  } @else {
+    <p>Cargando estadísticas...</p>
+  }
+</div>

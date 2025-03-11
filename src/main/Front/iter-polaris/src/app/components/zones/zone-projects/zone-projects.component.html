@@ -1,0 +1,12 @@
+<div class="zone-projects">
+  <h2>Proyectos en esta Zona</h2>
+  @if (projects.length > 0) {
+    <ul>
+      @for (project of projects; track project.id) {
+        <li>{{ project.name }}</li>
+      }
+    </ul>
+  } @else {
+    <p>No hay proyectos en esta zona.</p>
+  }
+</div>

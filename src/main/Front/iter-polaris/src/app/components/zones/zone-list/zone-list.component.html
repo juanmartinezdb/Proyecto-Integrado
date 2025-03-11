@@ -1,0 +1,17 @@
+<div class="zone-list">
+  <h2>Mis Zonas</h2>
+  @if (zones.length > 0) {
+    <ul>
+      @for (zone of zones; track zone.id) {
+        <li>
+          <a [routerLink]="['/app/zones', zone.id]">
+            <span class="zone-color" [style.backgroundColor]="zone.color"></span>
+            {{ zone.name }}
+          </a>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes zonas registradas.</p>
+  }
+</div>

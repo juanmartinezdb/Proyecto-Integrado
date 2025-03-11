@@ -1,0 +1,15 @@
+<div class="notifications">
+  <h3>Notificaciones</h3>
+  @if (notifications.length > 0) {
+    <ul>
+      @for (notification of notifications; track notification.id) {
+        <li>
+          {{ notification.message }}
+          <button (click)="markAsRead(notification.id)">Marcar como leído</button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes notificaciones nuevas.</p>
+  }
+</div>

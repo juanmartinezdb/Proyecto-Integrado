@@ -1,0 +1,12 @@
+<div class="zone-journals">
+  <h2>Diarios en esta Zona</h2>
+  @if (journals.length > 0) {
+    <ul>
+      @for (journal of journals; track journal.id) {
+        <li>{{ journal.name }}</li>
+      }
+    </ul>
+  } @else {
+    <p>No hay diarios en esta zona.</p>
+  }
+</div>

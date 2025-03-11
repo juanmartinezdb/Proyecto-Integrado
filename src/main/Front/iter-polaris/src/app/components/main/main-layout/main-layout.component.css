@@ -4,14 +4,13 @@
   height: 100vh;
 }
 
-header {
-  background-color: #007bff;
-  color: white;
-  padding: 15px;
-  text-align: center;
+.content-container {
+  display: flex;
+  flex-grow: 1;
 }
 
 main {
   flex-grow: 1;
   padding: 20px;
+  overflow-y: auto;
 }

@@ -1,0 +1,15 @@
+<div class="gear-list">
+  <h2>Objetos Disponibles</h2>
+  @if (gears.length > 0) {
+    <ul>
+      @for (gear of gears; track gear.id) {
+        <li>
+          <strong>{{ gear.name }}</strong> - {{ gear.description }}
+          <button (click)="addToInventory(gear.id)">Añadir al inventario</button>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No hay objetos disponibles.</p>
+  }
+</div>

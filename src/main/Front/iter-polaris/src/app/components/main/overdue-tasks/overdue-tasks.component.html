@@ -1,0 +1,14 @@
+<div class="overdue-tasks">
+  <h2>Tareas Vencidas</h2>
+  @if (overdueTasks.length > 0) {
+    <ul>
+      @for (task of overdueTasks; track task.id) {
+        <li>
+          <strong>{{ task.name }}</strong> - Venció el {{ task.endDate }}
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No tienes tareas vencidas.</p>
+  }
+</div>

@@ -1,0 +1,14 @@
+<div class="completed-task">
+  <h2>Tareas Completadas</h2>
+  @if (completedTasks.length > 0) {
+    <ul>
+      @for (task of completedTasks; track task.id) {
+        <li>
+          <strong>{{ task.name }}</strong> - Completado el {{ task.endDate }}
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No has completado tareas recientemente.</p>
+  }
+</div>

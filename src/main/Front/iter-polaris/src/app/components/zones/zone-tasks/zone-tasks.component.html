@@ -1,0 +1,12 @@
+<div class="zone-tasks">
+  <h2>Tareas en esta Zona</h2>
+  @if (tasks.length > 0) {
+    <ul>
+      @for (task of tasks; track task.id) {
+        <li>{{ task.name }}</li>
+      }
+    </ul>
+  } @else {
+    <p>No hay tareas en esta zona.</p>
+  }
+</div>

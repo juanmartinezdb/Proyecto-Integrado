@@ -20,4 +20,8 @@ export class AuthService {
   logout() {
     localStorage.removeItem('jwt_token');
   }
+  forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/forgot-password`, { email });
+  }
+
 }

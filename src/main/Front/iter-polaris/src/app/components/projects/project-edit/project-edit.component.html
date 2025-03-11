@@ -1,0 +1,26 @@
+<div class="project-edit">
+  <h2>Editar Proyecto</h2>
+  <form [formGroup]="formu" (submit)="submit()">
+
+    <label for="name">Nombre</label>
+    <input type="text" id="name" class="form-control" formControlName="name">
+
+    <label for="description">Descripción</label>
+    <textarea id="description" class="form-control" formControlName="description"></textarea>
+
+    <label for="status">Estado</label>
+    <select id="status" class="form-control" formControlName="status">
+      <option value="ACTIVE">Activo</option>
+      <option value="COMPLETED">Completado</option>
+    </select>
+
+    <label for="priority">Prioridad</label>
+    <select id="priority" class="form-control" formControlName="priority">
+      <option value="HIGH">Alta</option>
+      <option value="MEDIUM">Media</option>
+      <option value="LOW">Baja</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+  </form>
+</div>

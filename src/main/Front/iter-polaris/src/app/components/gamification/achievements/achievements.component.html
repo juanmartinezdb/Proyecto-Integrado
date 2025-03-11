@@ -1,0 +1,14 @@
+<div class="achievements">
+  <h2>Mis Logros</h2>
+  @if (achievements.length > 0) {
+    <ul>
+      @for (achievement of achievements; track achievement.id) {
+        <li [class.unlocked]="achievement.unlocked">
+          {{ achievement.name }} - {{ achievement.unlocked ? 'Desbloqueado' : 'Bloqueado' }}
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>No has desbloqueado logros aún.</p>
+  }
+</div>

@@ -1,0 +1,25 @@
+<div class="agenda-calendar">
+  <h2>Calendario Mensual</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (week of [0,1,2,3,4]; track week) {
+        <tr>
+          @for (day of [1,2,3,4,5,6,7]; track day) {
+            <td>
+              <span>{{ week * 7 + day }}</span>
+              @for (event of getEventsForDay(week*7 + day); track event.id) {
+
+                <div>{{ event.title }}</div>
+              }
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
