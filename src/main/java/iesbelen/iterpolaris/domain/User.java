@@ -125,6 +125,9 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return !Boolean.TRUE.equals(deleted);
     }
+    public int getMaxSkillsAllowed() {
+        return this.level; // Un usuario puede tener tantas skills como su nivel.
+    }
     //posible expansión STYLES, STATISTICS, NOTIFICATIONS, ACHIEVEMENTS, REGISTRO DE ACCESOS, LA TIENDA PARA PLANTILLAS Y CLANES.
 
     //    private String accountStatus;       //"ACTIVE", "BLOCKED", "INACTIVE",... (en vistas a la mejorada)

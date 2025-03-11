@@ -23,7 +23,8 @@ public class Skill {     //ESTA ENTIDAD NO SE ASOCIA CON USUARIO! ENTIDAD GLOBAL
     private String name;
     private String description;
     private String type;   // mental, physical, emotional, social, creative, all
-    private Integer level; //a qie nivel estará disponible
+    @Column(name = "level_required")
+    private Integer levelRequired;
     private Integer cost; //para comprar con experiencia
     private Integer mana; //para usarla.
     private String icon;
@@ -31,4 +32,8 @@ public class Skill {     //ESTA ENTIDAD NO SE ASOCIA CON USUARIO! ENTIDAD GLOBAL
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_effect", nullable = false)
     private Effect effect;
+
+    @ManyToMany(mappedBy = "skills")
+    private Set<User> users;
+
 }

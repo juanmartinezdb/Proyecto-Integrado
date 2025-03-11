@@ -2,10 +2,12 @@ package iesbelen.iterpolaris.service;
 
 import iesbelen.iterpolaris.domain.Effect;
 import iesbelen.iterpolaris.domain.Skill;
+import iesbelen.iterpolaris.domain.User;
 import iesbelen.iterpolaris.dto.SkillRequest;
 import iesbelen.iterpolaris.dto.SkillResponse;
 import iesbelen.iterpolaris.repository.EffectRepository;
 import iesbelen.iterpolaris.repository.SkillRepository;
+import iesbelen.iterpolaris.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +18,12 @@ public class SkillService {
 
     private final SkillRepository skillRepository;
     private final EffectRepository effectRepository;
+    private final UserRepository userRepository;
 
-    public SkillService(SkillRepository skillRepository, EffectRepository effectRepository) {
+    public SkillService(SkillRepository skillRepository, EffectRepository effectRepository, UserRepository userRepository) {
         this.skillRepository = skillRepository;
         this.effectRepository = effectRepository;
+        this.userRepository = userRepository;
     }
 
     public SkillResponse createSkill(SkillRequest request) {
@@ -30,7 +34,7 @@ public class SkillService {
                 .name(request.getName())
                 .description(request.getDescription())
                 .type(request.getType())
-                .level(request.getLevel())
+                .levelRequired(request.getLevel())
                 .cost(request.getCost())
                 .mana(request.getMana())
                 .icon(request.getIcon())
@@ -68,7 +72,7 @@ public class SkillService {
         skill.setName(request.getName());
         skill.setDescription(request.getDescription());
         skill.setType(request.getType());
-        skill.setLevel(request.getLevel());
+        skill.setLevelRequired(request.getLevel());
         skill.setCost(request.getCost());
         skill.setMana(request.getMana());
         skill.setIcon(request.getIcon());
@@ -84,13 +88,30 @@ public class SkillService {
         skillRepository.save(skill);
     }
 
+    public SkillResponse acquireSkill(User user, Long skillId) {
+        Skill skill = skillRepository.findById(skillId)
+                .orElseThrow(() -> new RuntimeException("Skill no encontrada"));
+
+        if (skill.getLevelRequired() > user.getLevel()) {
+            throw new RuntimeException("No tienes el nivel suficiente para adquirir esta skill.");
+        }
+
+        if (user.getSkills().size() >= user.getMaxSkillsAllowed()) {
+            throw new RuntimeException("Has alcanzado el límite de skills permitidas.");
+        }
+
+        user.getSkills().add(skill);
+        userRepository.save(user);
+        return mapToResponse(skill);
+    }
+
     private SkillResponse mapToResponse(Skill skill) {
         return SkillResponse.builder()
                 .id(skill.getId())
                 .name(skill.getName())
                 .description(skill.getDescription())
                 .type(skill.getType())
-                .level(skill.getLevel())
+                .level(skill.getLevelRequired())
                 .cost(skill.getCost())
                 .mana(skill.getMana())
                 .icon(skill.getIcon())

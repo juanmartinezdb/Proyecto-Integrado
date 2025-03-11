@@ -11,10 +11,12 @@ public class LevelService {
 
     private final UserRepository userRepository;
     private final ZoneRepository zoneRepository;
+    private final NotificationService notificationService;
 
-    public LevelService(UserRepository userRepository, ZoneRepository zoneRepository) {
+    public LevelService(UserRepository userRepository, ZoneRepository zoneRepository, NotificationService notificationService) {
         this.userRepository = userRepository;
         this.zoneRepository = zoneRepository;
+        this.notificationService = notificationService;
     }
 
     public void addXPToUser(User user, int xpGained) {
@@ -35,6 +37,11 @@ public class LevelService {
             user.setSkillPoints(user.getSkillPoints() + 1); // Otorga un punto de habilidad
             user.setXp(user.getXp() - xpNeeded);
             currentLevel++;
+
+
+            // Notificación al usuario de que puede elegir una nueva skill
+            notificationService.createReminder(user, "¡Has subido de nivel! Elige una nueva skill.");
+
             xpNeeded = getXpForLevel(currentLevel + 1);
         }
         userRepository.save(user);

@@ -54,4 +54,8 @@ public class NotificationService {
                 .createdAt(notification.getCreatedAt())
                 .build();
     }
+
+    public void notifyLevelUp(User user) {
+        createReminder(user, "¡Has subido de nivel! No olvides elegir una nueva skill.");
+    }
 }

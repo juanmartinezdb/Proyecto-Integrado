@@ -205,6 +205,17 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("No hay zona predeterminada para este usuario"));
     }
 
+    private int getCoinsForChallengeLevel(ChallengeLevel challengeLevel) {
+        switch (challengeLevel) {
+            case MUY_FACIL: return 10;
+            case FACIL: return 30;
+            case NORMAL: return 60;
+            case DIFICIL: return 200;
+            case MUY_DIFICIL: return 500;
+            default: return 0;
+        }
+    }
+
     private TaskResponse mapToResponse(Task task) {
         return TaskResponse.builder()
                 .id(task.getId())
