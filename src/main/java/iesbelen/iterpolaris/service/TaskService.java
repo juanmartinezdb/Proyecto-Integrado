@@ -19,11 +19,15 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
     private final LogEntryRepository logEntryRepository;
+    private final NotificationService notificationService;
+    private final AchievementService achievementService;
     private final ZoneRepository zoneRepository;
     private final LevelService levelService;
 
     public TaskService(TaskRepository taskRepository,
                        ProjectRepository projectRepository,
+                       NotificationService notificationService,
+                       AchievementService achievementService,
                        LogEntryRepository logEntryRepository,
                        ZoneRepository zoneRepository,
                        LevelService levelService) {
@@ -31,6 +35,8 @@ public class TaskService {
         this.projectRepository = projectRepository;
         this.logEntryRepository = logEntryRepository;
         this.zoneRepository = zoneRepository;
+        this.notificationService = notificationService;
+        this.achievementService = achievementService;
         this.levelService = levelService;
     }
 
@@ -65,7 +71,7 @@ public class TaskService {
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .active(request.getActive())
-                .challengeLevel(request.getChallengeLevel()) // Se usa el nivel de desafío en lugar de XP
+                .challengeLevel(request.getChallengeLevel())
                 .user(user)
                 .project(project)
                 .parentTask(parentTask)
@@ -73,8 +79,16 @@ public class TaskService {
                 .build();
 
         Task saved = taskRepository.save(task);
+
+        // ✅ Crear notificación si la tarea tiene una fecha límite
+        if (task.getEndDate() != null) {
+            notificationService.createReminder(user,
+                    "📅 Recuerda completar tu tarea '" + task.getName() + "' antes del " + task.getEndDate() + "!");
+        }
+
         return mapToResponse(saved);
     }
+
 
     public List<TaskResponse> getAllTasks(User user) {
         return taskRepository.findByUserAndDeletedFalse(user)
@@ -155,18 +169,21 @@ public class TaskService {
             throw new RuntimeException("No tienes acceso a esta tarea");
         }
 
-        // Marcar la tarea como completada
+        // ✅ Marcar la tarea como completada
         task.setStatus("COMPLETED");
         taskRepository.save(task);
 
-        // Calcular XP basado en ChallengeLevel
+        // ✅ Notificación de éxito
+        notificationService.createReminder(user, "🎉 ¡Has completado la tarea: '" + task.getName() + "'!");
+
+        // ✅ Otorgar XP por completar la tarea
         int xpGained = task.getChallengeLevel().getXpValue();
         levelService.addXPToUser(user, xpGained);
 
-        // Registrar la actividad en LogEntry
+        // ✅ Registrar la actividad en LogEntry para la barra de energía
         LogEntry log = LogEntry.builder()
                 .energy(task.getEnergy())
-                .challengeLevel(task.getChallengeLevel()) // Se usa ChallengeLevel
+                .challengeLevel(task.getChallengeLevel())
                 .type("TASK")
                 .itemId(task.getId())
                 .endTimestamp(LocalDate.now())
@@ -175,6 +192,10 @@ public class TaskService {
                 .deleted(false)
                 .build();
         logEntryRepository.save(log);
+
+        // ✅ Verificar logros (ejemplo: 10 tareas completadas)
+        long completedTasks = taskRepository.countByUserAndStatus(user, "COMPLETED");
+        achievementService.checkAndUnlockAchievement(user, "tasks_completed", (int) completedTasks);
     }
 
     private Zone getDefaultZone(User user) {

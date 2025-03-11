@@ -15,16 +15,22 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ZoneRepository zoneRepository;
+    private final NotificationService notificationService;
+    private final AchievementService achievementService;
     private final JournalRepository journalRepository;
     private final LevelService levelService;
 
     public ProjectService(ProjectRepository projectRepository,
                           ZoneRepository zoneRepository,
                           JournalRepository journalRepository,
+                          NotificationService notificationService,
+                          AchievementService achievementService,
                           LevelService levelService) {
         this.projectRepository = projectRepository;
         this.zoneRepository = zoneRepository;
         this.journalRepository = journalRepository;
+        this.notificationService = notificationService;
+        this.achievementService = achievementService;
         this.levelService = levelService;
     }
 
@@ -67,6 +73,9 @@ public class ProjectService {
                 .build();
 
         Project savedProject = projectRepository.save(project);
+
+        notificationService.createReminder(user, "¡Nuevo proyecto creado: " + project.getName() + "!");
+
         return mapToResponse(savedProject);
     }
 
@@ -153,6 +162,14 @@ public class ProjectService {
         // Asignar XP al usuario
         int xpGained = project.getChallengeLevel().getXpValue();
         levelService.addXPToUser(user, xpGained);
+
+        // 🟢 Enviar notificación de proyecto completado
+        notificationService.createReminder(user, "¡Has completado el proyecto: " + project.getName() + "!");
+
+        // 🟢 Revisar si se ha desbloqueado algún logro de proyectos
+        long completedProjects = projectRepository.countByUserAndStatus(user, "COMPLETED");
+        achievementService.checkAndUnlockAchievement(user, "projects_completed", (int) completedProjects);
+
     }
 
     // ====================== Map Entity -> DTO ======================

@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     Optional<Task> findByIdAndDeletedFalse(Long id);
     List<Task> findByUserAndDeletedFalse(User user);
+
+    long countByUserAndStatus(User user, String status);
 }

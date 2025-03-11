@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
     }
 
     // Para registrar un usuario
-    public void register(RegisterRequest request) {
+    public User register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("El usuario ya existe");
         }
@@ -40,12 +40,11 @@ public class UserService implements UserDetailsService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                // Por defecto, registramos como "USER". Si queremos admin lo ponemos manual.
                 .role("USER")
                 .deleted(false)
                 .build();
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     // Otros métodos de manejo de usuarios

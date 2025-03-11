@@ -15,4 +15,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Optional<Project> findByIdAndDeletedFalse(Long id);
 
     List<Project> findByUserAndDeletedFalse(User user);
+
+    long countByUserAndStatus(User user, String status);
 }

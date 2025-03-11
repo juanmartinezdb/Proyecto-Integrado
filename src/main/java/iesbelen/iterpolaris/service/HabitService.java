@@ -17,33 +17,34 @@ public class HabitService {
     private final HabitRepository habitRepository;
     private final ZoneRepository zoneRepository;
     private final EffectRepository effectRepository;
+    private final NotificationService notificationService;
+    private final AchievementService achievementService;
     private final LevelService levelService;
 
     public HabitService(HabitRepository habitRepository,
                         ZoneRepository zoneRepository,
+                        NotificationService notificationService,
+                        AchievementService achievementService,
                         EffectRepository effectRepository,
                         LevelService levelService) {
         this.habitRepository = habitRepository;
         this.zoneRepository = zoneRepository;
         this.effectRepository = effectRepository;
+        this.notificationService = notificationService;
+        this.achievementService = achievementService;
         this.levelService = levelService;
     }
 
     public HabitResponse createHabit(User user, HabitRequest request) {
-        Zone zone = null;
-        if (request.getZoneId() != null) {
-            zone = zoneRepository.findByIdAndDeletedFalse(request.getZoneId())
-                    .orElseThrow(() -> new RuntimeException("Zona no encontrada"));
-            if (!zone.getUser().getId().equals(user.getId())) {
-                throw new RuntimeException("No tienes acceso a esta zona");
-            }
-        }
+        Zone zone = request.getZoneId() != null
+                ? zoneRepository.findByIdAndDeletedFalse(request.getZoneId())
+                .orElseThrow(() -> new RuntimeException("Zona no encontrada"))
+                : null;
 
-        Effect effect = null;
-        if (request.getEffectId() != null) {
-            effect = effectRepository.findByIdAndDeletedFalse(request.getEffectId())
-                    .orElseThrow(() -> new RuntimeException("Efecto no encontrado"));
-        }
+        Effect effect = request.getEffectId() != null
+                ? effectRepository.findByIdAndDeletedFalse(request.getEffectId())
+                .orElseThrow(() -> new RuntimeException("Efecto no encontrado"))
+                : null;
 
         Habit habit = Habit.builder()
                 .name(request.getName())
@@ -57,12 +58,25 @@ public class HabitService {
                 .totalCheck(0)
                 .zone(zone)
                 .effect(effect)
-                .challengeLevel(request.getChallengeLevel()) // Se usa challengeLevel en lugar de XP
+                .challengeLevel(request.getChallengeLevel())
                 .deleted(false)
                 .user(user)
                 .build();
 
         Habit saved = habitRepository.save(habit);
+
+        // Enviar notificación basada en frecuencia del hábito
+        String reminderMessage = switch (habit.getFrequency()) {
+            case "DAILY" -> "¡No olvides realizar tu hábito diario: " + habit.getName() + "!";
+            case "WEEKLY" -> "¡Recuerda cumplir con tu hábito semanal: " + habit.getName() + "!";
+            case "MONTHLY" -> "¡Tienes pendiente tu hábito mensual: " + habit.getName() + "!";
+            default -> null;
+        };
+
+        if (reminderMessage != null) {
+            notificationService.createReminder(user, reminderMessage);
+        }
+
         return mapToResponse(saved);
     }
 
@@ -141,14 +155,21 @@ public class HabitService {
         // Incrementar la racha y total de veces completado
         habit.setStreak(habit.getStreak() + 1);
         habit.setTotalCheck(habit.getTotalCheck() + 1);
-        habitRepository.save(habit);
 
         // Calcular XP con el multiplicador de racha
         double multiplier = 1.0 + (Math.min(habit.getStreak(), 10) * 0.1); // Máximo x2 con racha de 10
         int xpGained = (int) (habit.getChallengeLevel().getXpValue() * multiplier);
 
-        // Asignar XP al usuario
+        // Asignar XP al usuario y guardar hábito una sola vez después
         levelService.addXPToUser(user, xpGained);
+        habitRepository.save(habit);
+
+        // Enviar notificación de hábito completado
+        notificationService.createReminder(user, "¡Has completado tu hábito: " + habit.getName() + "!");
+
+        // Revisar si se ha desbloqueado algún logro
+        achievementService.checkAndUnlockAchievement(user, "habit_streak", habit.getStreak());
+        achievementService.checkAndUnlockAchievement(user, "habits_completed", habit.getTotalCheck());
     }
 
     private HabitResponse mapToResponse(Habit habit) {
@@ -163,10 +184,11 @@ public class HabitService {
                 .frequency(habit.getFrequency())
                 .streak(habit.getStreak())
                 .totalCheck(habit.getTotalCheck())
-                .challengeLevel(habit.getChallengeLevel()) // Agregado en el response
+                .challengeLevel(habit.getChallengeLevel())
                 .zoneId(habit.getZone() != null ? habit.getZone().getId() : null)
                 .userId(habit.getUser().getId())
                 .effectId(habit.getEffect() != null ? habit.getEffect().getId() : null)
                 .build();
     }
+
 }

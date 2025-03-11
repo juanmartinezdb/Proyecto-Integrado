@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface HabitRepository extends JpaRepository<Habit, Long> {
     Optional<Habit> findByIdAndDeletedFalse(Long id);
     List<Habit> findByUserAndDeletedFalse(User user);
+
+    long countByUserAndDeletedFalse(User user);
 }
