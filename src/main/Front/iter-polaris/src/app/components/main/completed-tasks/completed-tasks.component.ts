@@ -1,12 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TaskService } from '../../../services/tasks.service';
+import { TaskService } from '../../../services/task.service';
 import { TaskResponse } from '../../../models/task.model';
 
 @Component({
   selector: 'app-completed-task',
   imports: [],
-  templateUrl: './completed-task.component.html',
-  styleUrl: './completed-task.component.css'
+  templateUrl: './completed-tasks.component.html',
+  styleUrl: './completed-tasks.component.css'
 })
 export class CompletedTaskComponent implements OnInit {
   completedTasks: TaskResponse[] = [];

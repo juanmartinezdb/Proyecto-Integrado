@@ -1,10 +1,15 @@
 <div class="zone-orbs">
   <h3>Zonas</h3>
+  @if (zones.length > 0) {
   <div class="zone-list">
     @for (zone of zones; track zone.id) {
-      <a [routerLink]="['/app/zones', zone.id]" class="zone-circle" [style.backgroundColor]="zone.color">
-        {{ zone.name.charAt(0) }}
-      </a>
+    <a [routerLink]="['/app/zones', zone.id]" class="zone-circle" [style.backgroundColor]="zone.color">
+      {{ zone.name.charAt(0) }}
+    </a>
     }
   </div>
-</div>
+  } @else {
+  <p>No hay zonas creadas.</p>
+  <button (click)="createZone()">Crear una zona</button>
+  }
+  

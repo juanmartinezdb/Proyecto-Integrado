@@ -1,31 +1,47 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { UserDTO } from '../models/user.model';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { User } from '../models/user.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
-  private baseUrl = 'http://localhost:8080/user';
+  http = inject(HttpClient);
+  private usersSubject = new BehaviorSubject<User[]>([]);
+  users$ = this.usersSubject.asObservable();
+  url = 'http://localhost:3000/users';
 
-  constructor(private http: HttpClient) {}
-
-  getUserProfile(): Observable<UserDTO> {
-    return this.http.get<UserDTO>(`${this.baseUrl}/profile`);
+  constructor() {
+    this.load();
   }
 
-  updateUser(userId: number, user: Partial<UserDTO>): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/update/${userId}`, user);
+  load() {
+    this.http.get<User[]>(this.url).subscribe({
+      next: (data) => this.usersSubject.next(data),
+      error: (err) => console.error('Error loading users', err)
+    });
   }
 
-  getCalendarSettings(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/calendar-settings`);
+  getById(id: number) {
+    return this.http.get<User>(`${this.url}/${id}`);
   }
 
-  updateCalendarSettings(settings: any): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/calendar-settings`, settings);
-  }
-  getEnergyBalance(): Observable<{ energy: number; maxEnergy: number }> {
-    return this.http.get<{ energy: number; maxEnergy: number }>(`${this.baseUrl}/energy-balance`);
+  update(id: number, user: User) {
+    this.http.put(`${this.url}/${id}`, user).subscribe({
+      next: () => this.load(),
+      error: (err) => console.error(`Error updating user with ID ${id}`, err)
+    });
   }
 
+  remove(id: number) {
+    this.http.delete(`${this.url}/${id}`).subscribe({
+      next: () => this.load(),
+      error: (err) => console.error(`Error deleting user with ID ${id}`, err)
+    });
+  }
+
+  getCurrentUser(username: string) {
+    return this.http.get<User>(`${this.url}/me?username=${username}`);
+  }
 }

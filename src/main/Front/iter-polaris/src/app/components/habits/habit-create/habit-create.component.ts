@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HabitService } from '../../../services/habits.service';
+import { HabitService } from '../../../services/habit.service';
 import { Router } from '@angular/router';
 
 @Component({

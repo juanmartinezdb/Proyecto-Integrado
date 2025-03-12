@@ -1,15 +1,27 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { UserStatsResponse } from '../models/stats.model';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class StatsService {
-  private baseUrl = 'http://localhost:8080/stats';
+  http = inject(HttpClient);
+  url = 'http://localhost:3000/stats';
 
-  constructor(private http: HttpClient) {}
+  getUserEnergy(period: string = 'week') {
+    return this.http.get<number>(`${this.url}/user/energy?period=${period}`);
+  }
 
-  getUserStats(): Observable<UserStatsResponse> {
-    return this.http.get<UserStatsResponse>(`${this.baseUrl}`);
+  getUserXp(period: string = 'week') {
+    return this.http.get<number>(`${this.url}/user/xp?period=${period}`);
+  }
+
+  getZoneEnergy(zoneId: number, period: string = 'week') {
+    return this.http.get<number>(`${this.url}/zone/${zoneId}/energy?period=${period}`);
+  }
+
+  getZoneXp(zoneId: number, period: string = 'week') {
+    return this.http.get<number>(`${this.url}/zone/${zoneId}/xp?period=${period}`);
   }
 }

@@ -1,0 +1,12 @@
+<div class="zone-create">
+  <h2>Crear Nueva Zona</h2>
+  <form [formGroup]="zoneForm" (submit)="submit()">
+    <label for="name">Nombre</label>
+    <input type="text" id="name" formControlName="name">
+    <label for="description">Descripción</label>
+    <textarea id="description" formControlName="description"></textarea>
+    <label for="color">Color</label>
+    <input type="color" id="color" formControlName="color">
+    <button type="submit">Crear Zona</button>
+  </form>
+</div>

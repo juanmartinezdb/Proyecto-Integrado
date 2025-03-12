@@ -1,16 +1,21 @@
-
 export interface JournalRequest {
   name: string;
-  description?: string;
-  image?: string;
-  type?: string;
-  lastEntryDate?: string;
-  streak?: number;
+  description: string;
+  image: string;
+  type: 'mental' | 'physical' | 'emotional' | 'creative' | 'social';
+  lastEntryDate?: string; // ISO Date format
+  streak: number;
 }
 
-export interface JournalResponse extends JournalRequest {
+export interface JournalResponse {
   id: number;
-  createdAt: string;
+  name: string;
+  description: string;
+  image: string;
+  type: string;
+  createdAt: string; // ISO Date format
   userId: number;
-  entriesIds?: Set<number>;
+  lastEntryDate?: string; // ISO Date format
+  streak: number;
+  entriesIds: number[];
 }

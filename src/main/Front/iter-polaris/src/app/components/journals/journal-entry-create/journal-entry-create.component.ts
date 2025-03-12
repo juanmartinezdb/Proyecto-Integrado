@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { JournalService } from '../../../services/journals.service';
+import { JournalService } from '../../../services/journal.service';
 
 @Component({
   selector: 'app-journal-entry-create',

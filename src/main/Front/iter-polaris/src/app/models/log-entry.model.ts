@@ -1,14 +1,19 @@
-
 export interface LogEntryRequest {
-  challengeLevel: string;
-  type: string;
+  challengeLevel: 'MUY_FACIL' | 'FACIL' | 'NORMAL' | 'DIFICIL' | 'MUY_DIFICIL';
+  type: 'TASK' | 'HABIT' | 'JOURNAL_ENTRY' | 'PROJECT';
   itemId: number;
-  endTimestamp: string;
-  energy?: number;
+  endTimestamp: string; // ISO Date format
+  energy: number;
   zoneId: number;
 }
 
-export interface LogEntryResponse extends LogEntryRequest {
+export interface LogEntryResponse {
   id: number;
+  challengeLevel: 'MUY_FACIL' | 'FACIL' | 'NORMAL' | 'DIFICIL' | 'MUY_DIFICIL';
+  type: string;
+  itemId: number;
+  endTimestamp: string; // ISO Date format
+  energy: number;
   userId: number;
+  zoneId: number;
 }

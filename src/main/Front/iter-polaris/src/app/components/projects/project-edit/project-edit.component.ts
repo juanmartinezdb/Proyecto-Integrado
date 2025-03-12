@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProjectService } from '../../../services/projects.service';
+import { ProjectService } from '../../../services/project.service';
 import { ProjectResponse } from '../../../models/project.model';
 
 @Component({

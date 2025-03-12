@@ -4,5 +4,27 @@
   align-items: center;
   background-color: #007bff;
   color: white;
-  padding: 15px;
+  padding: 15px 20px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px; /* Espaciado entre enlaces */
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-info {
+  font-weight: bold;
 }

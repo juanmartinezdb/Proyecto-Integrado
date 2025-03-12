@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { JournalService } from '../../../services/journals.service';
+import { JournalService } from '../../../services/journal.service';
 import { Router } from '@angular/router';
 
 @Component({

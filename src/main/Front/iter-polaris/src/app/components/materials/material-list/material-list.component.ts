@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MaterialService } from '../../../services/materials.service';
+import { MaterialService } from '../../../services/material.service';
 import { MaterialResponse } from '../../../models/material.model';
 import { RouterLink, RouterModule } from '@angular/router';
 

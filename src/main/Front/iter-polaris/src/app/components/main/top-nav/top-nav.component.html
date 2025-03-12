@@ -1,4 +1,13 @@
 <header class="top-nav">
   <h1>Iter Polaris</h1>
+  <nav class="nav-links">
+    <a [routerLink]="['/app/dashboard']">Dashboard</a>
+    <a [routerLink]="['/app/zones']">Zonas</a>
+    <a [routerLink]="['/app/tasks']">Tareas</a>
+    <a [routerLink]="['/app/projects']">Proyectos</a>
+  </nav>
+  <div class="user-info">
+    Bienvenido, {{ userName }}
+  </div>
   <app-energy-balance></app-energy-balance>
 </header>

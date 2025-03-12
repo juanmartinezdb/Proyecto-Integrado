@@ -1,18 +1,13 @@
-export interface InventoryItemResponse {
-  id: number;
-  gearName: string;
-  remainingUses: number;
-  acquiredAt: string;
+export interface InventoryItemRequest {
+  gearId: number;
+  remainingUses?: number;
 }
 
-export interface GearResponse {
+export interface InventoryItemResponse {
   id: number;
-  name: string;
-  description?: string;
-  type?: string;
-  maxUses?: number;
-  cost?: number;
-  consumable?: boolean;
-  rarity?: string;
-  effectId?: number;
+  remainingUses: number;
+  acquiredAt: string; // ISO Date format
+  gearId: number;
+  gearName?: string;
+  userId: number;
 }

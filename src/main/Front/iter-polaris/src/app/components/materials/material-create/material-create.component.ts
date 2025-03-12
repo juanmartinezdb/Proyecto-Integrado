@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MaterialService } from '../../../services/materials.service';
+import { MaterialService } from '../../../services/material.service';
 import { Router } from '@angular/router';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TaskService } from '../../../services/tasks.service';
+import { TaskService } from '../../../services/task.service';
 import { TaskResponse } from '../../../models/task.model';
 
 @Component({

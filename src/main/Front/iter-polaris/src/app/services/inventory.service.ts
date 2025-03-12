@@ -1,27 +1,46 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { InventoryItemResponse, GearResponse } from '../models/inventory.model';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { InventoryItemRequest, InventoryItemResponse } from '../models/inventory.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class InventoryService {
-  private baseUrl = 'http://localhost:8080/inventory';
+  http = inject(HttpClient);
+  private inventorySubject = new BehaviorSubject<InventoryItemResponse[]>([]);
+  inventory$ = this.inventorySubject.asObservable();
+  url = 'http://localhost:3000/inventory';
 
-  constructor(private http: HttpClient) {}
-
-  getInventory(): Observable<InventoryItemResponse[]> {
-    return this.http.get<InventoryItemResponse[]>(`${this.baseUrl}`);
+  constructor() {
+    this.load();
   }
 
-  getAvailableGears(): Observable<GearResponse[]> {
-    return this.http.get<GearResponse[]>(`${this.baseUrl}/gears`);
+  load() {
+    this.http.get<InventoryItemResponse[]>(this.url).subscribe({
+      next: (data) => this.inventorySubject.next(data),
+      error: (err) => console.error('Error loading inventory', err)
+    });
   }
 
-  addGearToInventory(gearId: number): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/add`, { gearId });
+  add(item: InventoryItemRequest) {
+    this.http.post<InventoryItemResponse>(this.url, item).subscribe({
+      next: () => this.load(),
+      error: (err) => console.error('Error adding inventory item', err)
+    });
   }
 
-  useItem(itemId: number): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/use/${itemId}`, {});
+  update(id: number, item: InventoryItemRequest) {
+    this.http.put(`${this.url}/${id}`, item).subscribe({
+      next: () => this.load(),
+      error: (err) => console.error(`Error updating inventory item with ID ${id}`, err)
+    });
+  }
+
+  remove(id: number) {
+    this.http.delete(`${this.url}/${id}`).subscribe({
+      next: () => this.load(),
+      error: (err) => console.error(`Error deleting inventory item with ID ${id}`, err)
+    });
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HabitService } from '../../../services/habits.service';
+import { HabitService } from '../../../services/habit.service';
 import { HabitResponse } from '../../../models/habit.model';
 import { RouterLink } from '@angular/router';
 

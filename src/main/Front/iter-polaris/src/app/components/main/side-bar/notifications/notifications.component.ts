@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { NotificationResponse } from '../../../../models/notification.model';
-import { NotificationService } from '../../../../services/notifications.service';
+import { NotificationService } from '../../../../services/notification.service';
 // import { NotificationService } from '../../../services/notification.service';
 // import { NotificationResponse } from '../../../models/notification.model';
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { JournalService } from '../../../services/journals.service';
+import { JournalService } from '../../../services/journal.service';
 import { JournalResponse } from '../../../models/journal.model';
 import { RouterLink } from '@angular/router';
 

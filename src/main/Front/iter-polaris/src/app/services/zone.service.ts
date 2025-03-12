@@ -1,41 +1,46 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { ZoneResponse } from '../models/zone.model';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { ZoneRequest, ZoneResponse } from '../models/zone.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ZoneService {
-  private baseUrl = 'http://localhost:8080/zones';
+  http = inject(HttpClient);
+  private zonesSubject = new BehaviorSubject<ZoneResponse[]>([]);
+  zones$ = this.zonesSubject.asObservable();
+  url = 'http://localhost:3000/zones';
 
-  constructor(private http: HttpClient) {}
-
-  // Obtener todas las zonas del usuario
-  getZones(): Observable<ZoneResponse[]> {
-    return this.http.get<ZoneResponse[]>(`${this.baseUrl}`);
+  constructor() {
+    this.load();
   }
 
-  // Obtener una zona por ID
-  getZoneById(id: number): Observable<ZoneResponse> {
-    return this.http.get<ZoneResponse>(`${this.baseUrl}/${id}`);
+  load() {
+    this.http.get<ZoneResponse[]>(this.url).subscribe({
+      next: (data) => this.zonesSubject.next(data),
+      error: (err) => console.error('Error loading zones', err)
+    });
   }
 
-  // Obtener hábitos de una zona
-  getZoneHabits(zoneId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/${zoneId}/habits`);
+  add(zone: ZoneRequest) {
+    this.http.post<ZoneResponse>(this.url, zone).subscribe({
+      next: () => this.load(),
+      error: (err) => console.error('Error adding zone', err)
+    });
   }
 
-  // Obtener diarios de una zona
-  getZoneJournals(zoneId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/${zoneId}/journals`);
+  update(id: number, zone: ZoneRequest) {
+    this.http.put(`${this.url}/${id}`, zone).subscribe({
+      next: () => this.load(),
+      error: (err) => console.error(`Error updating zone with ID ${id}`, err)
+    });
   }
 
-  // Obtener tareas de una zona
-  getZoneTasks(zoneId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/${zoneId}/tasks`);
-  }
-
-  // Obtener proyectos de una zona
-  getZoneProjects(zoneId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/${zoneId}/projects`);
+  remove(id: number) {
+    this.http.delete(`${this.url}/${id}`).subscribe({
+      next: () => this.load(),
+      error: (err) => console.error(`Error deleting zone with ID ${id}`, err)
+    });
   }
 }

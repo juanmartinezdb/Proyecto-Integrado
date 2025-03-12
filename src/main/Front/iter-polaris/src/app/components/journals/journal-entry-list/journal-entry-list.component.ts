@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JournalService } from '../../../services/journals.service';
+import { JournalService } from '../../../services/journal.service';
 import { RouterModule } from '@angular/router';
 
 @Component({

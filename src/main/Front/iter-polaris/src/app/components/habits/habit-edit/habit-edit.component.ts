@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HabitService } from '../../../services/habits.service';
+import { HabitService } from '../../../services/habit.service';
 import { HabitResponse } from '../../../models/habit.model';
 
 @Component({

@@ -13,8 +13,8 @@ export class UserInfoComponent implements OnInit {
   userService = inject(UserService);
 
   ngOnInit(): void {
-    this.userService.getUserProfile().subscribe((data: UserDTO) => {
-      this.user = data;
+    this.userService.getUserProfile().subscribe((data) => {
+      this.user = data!;
     });
   }
 }

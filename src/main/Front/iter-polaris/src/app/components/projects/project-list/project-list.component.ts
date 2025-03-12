@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProjectService } from '../../../services/projects.service';
+import { ProjectService } from '../../../services/project.service';
 import { ProjectResponse } from '../../../models/project.model';
 import { RouterModule } from '@angular/router';
 
